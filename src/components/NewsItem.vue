@@ -7,15 +7,10 @@ const { post } = defineProps<{post: IPost}>()
 </script>
 
 <template>
-  <div class='post-item'>
-    {{ post.value }}
-  </div>
+  <v-card :text="post.text">
+    <template v-slot:title>
+      <span class="font-weight-black">{{ post.value }}</span>
+    </template>
+  </v-card>
 </template>
 
-<style scoped>
-  .post-item {
-    border: 1px solid red;
-    height: 100px;
-    text-align: center;
-  }
-</style>

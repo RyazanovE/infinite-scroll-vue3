@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import NewsList from './components/NewsList.vue'
+  import Sidebar from './components/Sidebar.vue'
 </script>
 
 <template>
-  <div class='news-list-wrapper'>
-    <NewsList/>
-  </div>
+  <v-layout class="rounded rounded-md">
+    <v-app-bar title="Vue 3 vuetify test scroll app"></v-app-bar>
+    <Sidebar class='mt-2'/>
+    <v-main>
+      <div class='main'>
+        <RouterView />
+      </div>
+    </v-main>
+  </v-layout>
 </template>
 
 <style scoped>
-  .news-list-wrapper {
-    display: flex;
-    justify-content: center;
+  .main {
     padding: 0 20%;
   }
 </style>

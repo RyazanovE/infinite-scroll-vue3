@@ -1,20 +1,27 @@
 import { Ref, computed, ref, watch } from 'vue';
 
-export function useFakeFetch<T>(callback: (itemsAmount: number, start: number) => T[], initialStart= 0, initialLimit = 15) {
+export function useFakeFetch<T>(
+  callback: (itemsAmount: number, start: number) => T[],
+  manually = false,
+  initialStart = 0,
+  initialLimit = 15
+) {
   const limit = ref(initialLimit);
   const start = ref(initialStart);
   const data: Ref<T[] | null> = ref(null);
   const isLoading = ref(false);
 
-  const itemsAmount = computed(() => limit.value - start.value)
-
+  const itemsAmount = computed(() => limit.value - start.value);
 
   async function fakeFetch() {
+    if (itemsAmount.value <= 0) return;
+    
     try {
-      console.log("fetch", itemsAmount)
       isLoading.value = true;
-      const fakeResultData: T[] | null = itemsAmount ? callback(itemsAmount.value, start.value) : null;
-      data.value = await new Promise((resolve) => setTimeout(() => resolve(fakeResultData), 2000));
+      const fakeResultData = callback(itemsAmount.value, start.value);
+      data.value = await new Promise<T[]>((resolve) =>
+        setTimeout(() => resolve(fakeResultData), 2000)
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -22,27 +29,24 @@ export function useFakeFetch<T>(callback: (itemsAmount: number, start: number) =
     }
   }
 
-  if (itemsAmount) {
+  if (!manually && itemsAmount.value > 0) {
     fakeFetch();
   }
 
   watch([limit, start], () => {
-    if (!isLoading.value) {
-      console.log("watch", limit.value)
+    if (!isLoading.value && !manually) {
       fakeFetch();
     }
   });
 
+  function addLimit() {
+    limit.value += 5;
+  }
 
   return {
     data,
     isLoading,
-    setStart: (newStart: number) => {
-      start.value = newStart;
-    },
-    setLimit: (newLimit: number) => {
-      console.log('🚀 ~ newLimit:', newLimit)
-      limit.value = newLimit;
-    }
+    addLimit,
+    fakeFetch,
   };
 }
