@@ -6,7 +6,7 @@ import { IPost } from '../types';
   const virtualizationSettings = {
     minInd: 1,
     maxInd: 50,
-    startInd: 1,
+    startInd: 6,
     itemHeight: 168,
     amount: 5,
     tolerance: 2
@@ -36,4 +36,3 @@ import { IPost } from '../types';
 <template>
   <VirtualScroller :settings="virtualizationSettings" :posts='posts' @listScroll='onListScroll'/>
 </template>
-
