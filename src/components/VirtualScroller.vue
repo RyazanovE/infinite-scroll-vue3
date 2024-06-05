@@ -23,7 +23,7 @@ import NewsItem from '../components/NewsItem.vue'
   const initialPosition = topPaddingHeight.value + toleranceHeight;
 
   onMounted(() => {
-    if (viewport.value) {
+    if (viewport.value && viewport.value.scrollTop !== initialPosition) {
       viewport.value.scrollTop = initialPosition;
     }
     
